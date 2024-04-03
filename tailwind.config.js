@@ -7,3 +7,6 @@ export const theme = {
 };
 export const plugins = [];
 
+export const corePlugins = {
+  preflight: false
+}
