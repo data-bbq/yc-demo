@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/yc-demo/static/css/main.158d622d.css",
+    "main.js": "/yc-demo/static/js/main.cfadbf01.js",
+    "static/js/453.6d88a90a.chunk.js": "/yc-demo/static/js/453.6d88a90a.chunk.js",
+    "static/media/bbq-grill.png": "/yc-demo/static/media/bbq-grill.be5600a4539d085e90e1.png",
+    "static/media/file-folder.png": "/yc-demo/static/media/file-folder.7d9a04d795d0e3d31b57.png",
+    "static/media/microsoft-excel.png": "/yc-demo/static/media/microsoft-excel.0e9ce81782a2b6e142cb.png",
+    "static/media/google-drive.png": "/yc-demo/static/media/google-drive.445c5341326cca444d95.png",
+    "index.html": "/yc-demo/index.html",
+    "main.158d622d.css.map": "/yc-demo/static/css/main.158d622d.css.map",
+    "main.cfadbf01.js.map": "/yc-demo/static/js/main.cfadbf01.js.map",
+    "453.6d88a90a.chunk.js.map": "/yc-demo/static/js/453.6d88a90a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.158d622d.css",
+    "static/js/main.cfadbf01.js"
+  ]
+}
