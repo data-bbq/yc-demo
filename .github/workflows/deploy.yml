@@ -5,6 +5,9 @@ on:
     branches:
       - main  # Adjust this to match your main branch name
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
