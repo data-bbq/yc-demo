@@ -1,4 +1,4 @@
-import { Button, Form, Input, Layout, Menu, Steps } from 'antd';
+import { Button, Form, Input, Layout, Menu } from 'antd';
 import { useState } from 'react';
 
 import './App.css';
@@ -9,7 +9,7 @@ import { PlusOutlined } from '@ant-design/icons';
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
-  const [integrations, setIntegrations] = useState([]);
+  const [integrations] = useState([]);
   const [workflowModalOpen, setWorkflowModalOpen] = useState(false);
 
   return (

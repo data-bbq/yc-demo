@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { Modal, Button } from 'antd';
 
 import FileFolderImage from "../assets/file-folder.png";
