@@ -1,17 +1,19 @@
 import { Button, Form, Input, Layout, Menu, Skeleton, Tag } from 'antd';
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode, useMemo, useState } from 'react';
 
 import Crunchbase from "./assets/crunchbase.png";
 import FileFolder from "./assets/file-folder.png";
 import GoogleDrive from "./assets/google-drive.png";
 import MicrosoftExcel from "./assets/microsoft-excel.png";
 
+
 import './App.css';
 
 import grillImage from "./assets/bbq-grill.png";
 import { Integration, WorkflowModal } from './components/WorkflowModal';
-import { PlusOutlined } from '@ant-design/icons';
+import { CloseCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { WorkflowAction } from './components/WorkflowAction';
+import { workerData } from 'worker_threads';
 
 
 export interface WorkflowStepAction {
@@ -33,6 +35,7 @@ const Link: FC<{children?: ReactNode}> = ({ children }) => (
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
+  const [numberOfStepsShown, setNumberOfStepsShown] = useState(0);
   const [workflowSteps, setWorkflowSteps] = useState<WorkflowStep[]>([
     { 
       integration: {name: "Crunchbase", iconImage: Crunchbase },
@@ -83,14 +86,55 @@ function App() {
         }
       ]
     },
+    {
+      integration: {name: "Upload File", iconImage: FileFolder },
+      actions: [
+        { 
+          action: (
+            <div>
+              <span>Import </span>
+              <Tag closeIcon>Most Recent</Tag>
+              <Tag closeIcon>Term Sheet</Tag>
+              <span>Document Type </span>
+            </div>
+          ),
+          children: [
+            {
+              action: (
+                <div>
+                  <span>Select Key Terms </span>
+                  <Tag closeIcon>Company Name</Tag>
+                  <Tag closeIcon>Website</Tag>
+                  <Tag closeIcon>Funding Date</Tag>
+                  <Tag closeIcon>Funding Amount</Tag>
+                  <Tag closeIcon>Post Money Valuation</Tag>
+                  <Tag closeIcon>Funding Stage</Tag>
+                </div>
+              )
+            },
+            { 
+              action: (
+                <div>
+                  <span>Format as </span>
+                  <Tag closeIcon>Table</Tag>
+                </div>
+              )
+            },
+          ]
+        }
+      ]
+    }
   ]);
+  const shownWorkflowSteps = useMemo(() => workflowSteps.slice(0, numberOfStepsShown), [numberOfStepsShown, workflowSteps]);
   const [workflowModalOpen, setWorkflowModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [promptInput, setPromptInput] = useState("");
 
   const onButtonClick = () => {
     setLoading(true);
-    setTimeout(() => setLoading(false), 1000);
+    setNumberOfStepsShown(numberOfStepsShown + 1);
+    setTimeout(() => setLoading(false), 2500);
+    setPromptInput("");
   };
 
   return (
@@ -120,9 +164,9 @@ function App() {
                 <div className="flex flex-col h-full justify-center">
                   <Skeleton active paragraph={{ rows: 16 }} />
                 </div>
-              ) : workflowSteps.length ? (
+              ) : shownWorkflowSteps.length ? (
                 <div className="p-4 h-full flex flex-col">
-                  {workflowSteps.map((step, i) => (
+                  {shownWorkflowSteps.map((step, i) => (
                     <div className="flex flex-col">
                       <div className="flex gap-x-2 pb-6">
                         <div className="h-full flex flex flex-col gap-y-4">
@@ -133,10 +177,13 @@ function App() {
                             <div className="w-px border-l h-full border-dashed border-black"></div>
                           </div>
                         </div>
-                        <div>
-                          <div className="rounded border-2 border-gray-200 border-solid w-full flex gap-x-2 p-2">
-                            <img src={step.integration.iconImage} className="w-8 h-8" alt="Icon" />
-                            <div className="text-2xl font-bold text-gray-700">{step.integration.name}</div>
+                        <div className="w-full">
+                          <div className="flex justify-between w-full border-2 border-gray-200 border-solid p-2">
+                            <div className="rounded w-full flex gap-x-2">
+                              <img src={step.integration.iconImage} className="w-8 h-8" alt="Icon" />
+                              <div className="text-2xl font-bold text-gray-700">{step.integration.name}</div>
+                            </div>
+                            <CloseCircleOutlined className="cursor-pointer" />
                           </div>
                           <div className="mt-2">
                             {step.actions.map(action => (
