@@ -3,7 +3,15 @@ export const content = [
   "./src/**/*.{js,jsx,ts,tsx}",
 ];
 export const theme = {
-  extend: {},
+  extend: {
+    fontFamily: {
+      sans: ['Seymour One', 'sans-serif'],
+    },
+    colors: {
+      'success-green': '#52c41a',
+      'hover-green': '#73d13d',
+    },
+  },
 };
 export const plugins = [];
 

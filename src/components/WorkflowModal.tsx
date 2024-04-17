@@ -95,11 +95,11 @@ export const WorkflowModal: FC<WorkflowModalProps> = ({ open, setOpen}) => {
         </Button>,
       ]}
     >
-      <div className="my-6 flex flex-col gap-y-4">
-        {integrationCategories.map(category => (
-          <div className="flex flex-col gap-y-2 overflow-x-auto">
+      <div className="my-6 flex flex-col gap-y-4 pr-6">
+        {integrationCategories.map((category, i) => (
+          <div className={`flex flex-col gap-y-2 overflow-x-auto`}>
             <span className="font-bold">{category.category}</span>
-            <div className="flex overflow-x-hidden gap-x-4">
+            <div className="flex gap-x-4">
               {category.integrations.map(integration => (
                 <div
                   className="border border-gray-200 border-solid min-w-[100px] h-28 rounded flex flex-col justify-center items-center gap-y-2 p-2 cursor-pointer" 
