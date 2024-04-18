@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { Modal, Button } from 'antd';
 
 import CrunchbaseImage from "../assets/crunchbase.png";
@@ -37,8 +37,6 @@ export interface Integration {
 }
 
 export const WorkflowModal: FC<WorkflowModalProps> = ({ open, setOpen}) => {
-
-  const [loading, setLoading] = useState(false);
 
   const integrationCategories = [
     {
