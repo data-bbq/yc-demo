@@ -6,12 +6,10 @@ import Snowflake from "./assets/snowflake.png";
 import GoogleDrive from "./assets/google-drive.png";
 import GoogleSheets from "./assets/google-sheets.png";
 
-import Merge from "./assets/merge.jpg";
-
 import './App.css';
 
 import { Integration, WorkflowModal } from './components/WorkflowModal';
-import { AppstoreOutlined, BellOutlined, BulbOutlined, CloseCircleOutlined, PlayCircleOutlined, PlusOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, BellOutlined, BulbOutlined, CloseCircleOutlined, DownOutlined, PlayCircleOutlined, PlusOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { WorkflowAction } from './components/WorkflowAction';
 
 import SubMenu from 'antd/es/menu/SubMenu';
@@ -48,7 +46,10 @@ function App() {
               action: (
                 <div>
                   <span>Filter by </span>
-                  <Tag closeIcon>Last 12 months</Tag>
+                  <Tag>
+                    <span className="mr-0.5">Last 12 months</span>
+                    <DownOutlined />
+                  </Tag>
                 </div>
               )
             },
@@ -61,6 +62,7 @@ function App() {
                   <Tag closeIcon>Leveraged Beta</Tag>
                   <Tag closeIcon>Debt</Tag>
                   <Tag closeIcon>Equity Value</Tag>
+                  <Tag closeIcon>Preferred Stock</Tag>
                 </div>
               )
             },
@@ -91,44 +93,28 @@ function App() {
                 </div>
               )
             },
-          ]
-        }
-      ]
-    },
-    {
-      integration: {name: "Merge Datasets", iconImage: Merge },
-      actions: [
-        { 
-          action: (
-            <div>
-              <span>Import </span>
-              <Tag closeIcon>Most Recent</Tag>
-              <Tag closeIcon>Term Sheet</Tag>
-              <span>Document Type </span>
-            </div>
-          ),
-          children: [
             {
               action: (
                 <div>
-                  <span>Select Key Terms </span>
-                  <Tag closeIcon>Company Name</Tag>
-                  <Tag closeIcon>Website</Tag>
-                  <Tag closeIcon>Funding Date</Tag>
-                  <Tag closeIcon>Funding Amount</Tag>
-                  <Tag closeIcon>Post Money Valuation</Tag>
-                  <Tag closeIcon>Funding Stage</Tag>
+                  <span>Format as </span>
+                  <Tag>
+                    <span className="mr-0.5">Table</span>
+                    <DownOutlined />
+                  </Tag>
                 </div>
               )
             },
-            { 
+            {
               action: (
                 <div>
-                  <span>Format as </span>
-                  <Tag closeIcon>Table</Tag>
+                  <span>Full join data to </span>
+                  <Tag>
+                    <span className="mr-0.5">Step 1</span>
+                    <DownOutlined />
+                  </Tag>
                 </div>
               )
-            },
+            }
           ]
         }
       ]
@@ -139,31 +125,44 @@ function App() {
         { 
           action: (
             <div>
-              <span>Import </span>
-              <Tag closeIcon>Most Recent</Tag>
-              <Tag closeIcon>Term Sheet</Tag>
-              <span>Document Type </span>
+              <span>Export to File </span>
+              <Tag>
+                <span className="mr-0.5">Uber DCF Model</span>
+                <DownOutlined />
+              </Tag>
             </div>
           ),
           children: [
             {
               action: (
                 <div>
-                  <span>Select Key Terms </span>
-                  <Tag closeIcon>Company Name</Tag>
-                  <Tag closeIcon>Website</Tag>
-                  <Tag closeIcon>Funding Date</Tag>
-                  <Tag closeIcon>Funding Amount</Tag>
-                  <Tag closeIcon>Post Money Valuation</Tag>
-                  <Tag closeIcon>Funding Stage</Tag>
+                  <span>Data Source: </span>
+                  <Tag>
+                    <span className="mr-0.5">Step 2 Query Execution</span>
+                    <DownOutlined />
+                  </Tag>
                 </div>
               )
             },
-            { 
+            {
               action: (
                 <div>
-                  <span>Format as </span>
-                  <Tag closeIcon>Table</Tag>
+                  <span>Sheet: </span>
+                  <Tag>
+                    <span className="mr-0.5">WACC</span>
+                    <DownOutlined />
+                  </Tag>
+                </div>
+              )
+            },
+            {
+              action: (
+                <div>
+                  <span>Starting Cell: </span>
+                  <Tag>
+                    <span className="mr-0.5">B16</span>
+                    <DownOutlined />
+                  </Tag>
                 </div>
               )
             },
@@ -192,10 +191,9 @@ function App() {
     setChangesApproved(false);
     setNumberOfStepsShown(numberOfStepsShown + 1);
     setTimeout(() => {
-      console.log("number of steps shown: ", numberOfStepsShown)
       setLoading(false);
       setPromptInput("");
-    }, 2500);
+    }, 0);
   };
 
   return (
@@ -212,10 +210,11 @@ function App() {
             </Button>
             <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" openKeys={["workflows"]}>
               <SubMenu key="workflows" icon={<AppstoreOutlined />} title="Workflows">
-                <Menu.Item key="workflow1">Workflow 1</Menu.Item>
-                <Menu.Item key="workflow2">Workflow 2</Menu.Item>
-                <Menu.Item key="workflow3">Workflow 3</Menu.Item>
-                <Menu.Item key="workflow4">Workflow 4</Menu.Item>
+                <Menu.Item key="workflow1">Uber DCF Model</Menu.Item>
+                <Menu.Item key="workflow2">Extract Deal Terms from Old Term Sheets</Menu.Item>
+                <Menu.Item key="workflow3">Portfolio Valuation Model</Menu.Item>
+                <Menu.Item key="workflow4">Fund Reporting Data Pipeline</Menu.Item>
+                <Menu.Item key="workflow5">CRM Data Enhancement</Menu.Item>
               </SubMenu>
             </Menu>
           </div>
@@ -274,7 +273,7 @@ function App() {
                   <Skeleton active paragraph={{ rows: 16 }} />
                 </div>
               ) : shownWorkflowSteps.length ? (
-                <div className="px-4 h-full flex flex-col gap-y-4">
+                <div className="px-4 h-full flex flex-col gap-y-4 max-h-[540px]">
                   {shownWorkflowSteps.map((step, i) => (
                     <div className={`flex flex-col p-4 gap-y-4 ${showConfirmationButtons(i) ? "border-2 border-green-500 border-dashed rounded" : ""}`}>
                       <div className="flex gap-x-2">
@@ -315,7 +314,7 @@ function App() {
                       )}
                     </div>
                   ))}
-                  <div className="w-[calc(100%-48px)] absolute h-4 z-5 bottom-px bg-[#f5f5f5] px-4"></div>
+                  {/* <div className="w-[calc(100%-48px)] absolute h-4 z-5 bottom-px bg-[#f5f5f5] px-4"></div> */}
                 </div>
               ) : (
                 <div className="flex flex-col w-full h-full justify-center items-center gap-y-6">
