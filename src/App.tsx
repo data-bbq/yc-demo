@@ -1,15 +1,15 @@
 import { Button, Form, Input, Layout, Menu, Skeleton, Tag } from 'antd';
-import { ReactNode, useCallback, useMemo, useRef, useState } from 'react';
+import { ReactNode, useCallback, useRef, useState } from 'react';
 
-import Crunchbase from "./assets/crunchbase.png";
-import FileFolder from "./assets/file-folder.png";
+import DataBBQLogo from "./assets/databbq-logo.png";
+import Snowflake from "./assets/snowflake.png";
+import GoogleDrive from "./assets/google-drive.png";
 import GoogleSheets from "./assets/google-sheets.png";
 
 import Merge from "./assets/merge.jpg";
 
 import './App.css';
 
-import grillImage from "./assets/bbq-grill.png";
 import { Integration, WorkflowModal } from './components/WorkflowModal';
 import { AppstoreOutlined, BellOutlined, BulbOutlined, CloseCircleOutlined, PlayCircleOutlined, PlusOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { WorkflowAction } from './components/WorkflowAction';
@@ -27,40 +27,23 @@ export interface WorkflowStep {
   actions: WorkflowStepAction[];
 }
 
-
-
-// const Link: FC<{children?: ReactNode}> = ({ children }) => (
-//   <span className="text-blue-600 bg-blue-200 cursor-pointer px-2 py-1 mx-1 rounded">{children}</span>
-// );
-
 function App() {
   const [collapsed, setCollapsed] = useState(false);
   const [numberOfStepsShown, setNumberOfStepsShown] = useState(0);
-  const [workflowSteps] = useState<WorkflowStep[]>([
+  const [workflowSteps, setWorkflowSteps] = useState<WorkflowStep[]>([
     { 
-      integration: {name: "Crunchbase", iconImage: Crunchbase },
+      integration: {name: "Snowflake", iconImage: Snowflake },
       actions: [
         { 
           action: (
             <div>
-              <span>Call </span>
-              <Tag closeIcon>Get Companies</Tag>
-              <span>Service </span>
+              <span>Query Table(s) </span>
+              <Tag closeIcon>Public High Growth Online Marketplace Companies List</Tag>
+              <Tag closeIcon>Mature Online Marketplace Companies List</Tag>
+              <span></span>
             </div>
           ),
           children: [
-            {
-              action: (
-                <div>
-                  <span>Companies: </span>
-                  <Tag closeIcon>AAPL</Tag>
-                  <Tag closeIcon>MSFT</Tag>
-                  <Tag closeIcon>TSLA</Tag>
-                  <Tag closeIcon>NFLX</Tag>
-                  <Tag closeIcon>UBER</Tag>
-                </div>
-              )
-            },
             { 
               action: (
                 <div>
@@ -72,13 +55,12 @@ function App() {
             { 
               action: (
                 <div className="">
-                  <span>Response fields: </span>
+                  <span>Columns: </span>
                   <Tag closeIcon>Company Name</Tag>
-                  <Tag closeIcon>Website</Tag>
-                  <Tag closeIcon>Funding Date</Tag>
-                  <Tag closeIcon>Funding Amount</Tag>
-                  <Tag closeIcon>Post Money Valuation</Tag>
-                  <Tag closeIcon>Funding Stage</Tag>
+                  <Tag closeIcon>Ticker</Tag>
+                  <Tag closeIcon>Leveraged Beta</Tag>
+                  <Tag closeIcon>Debt</Tag>
+                  <Tag closeIcon>Equity Value</Tag>
                 </div>
               )
             },
@@ -87,15 +69,13 @@ function App() {
       ]
     },
     {
-      integration: {name: "Upload File", iconImage: FileFolder },
+      integration: {name: "Google Drive", iconImage: GoogleDrive },
       actions: [
         { 
           action: (
             <div>
-              <span>Import </span>
-              <Tag closeIcon>Most Recent</Tag>
-              <Tag closeIcon>Term Sheet</Tag>
-              <span>Document Type </span>
+              <span>Import File: </span>
+              <Tag closeIcon>PDF Mature Trucking And Logistics (Non Rail)</Tag>
             </div>
           ),
           children: [
@@ -104,11 +84,10 @@ function App() {
                 <div>
                   <span>Select Key Terms </span>
                   <Tag closeIcon>Company Name</Tag>
-                  <Tag closeIcon>Website</Tag>
-                  <Tag closeIcon>Funding Date</Tag>
-                  <Tag closeIcon>Funding Amount</Tag>
-                  <Tag closeIcon>Post Money Valuation</Tag>
-                  <Tag closeIcon>Funding Stage</Tag>
+                  <Tag closeIcon>Ticker</Tag>
+                  <Tag closeIcon>Leveraged Beta</Tag>
+                  <Tag closeIcon>Debt</Tag>
+                  <Tag closeIcon>Equity Value</Tag>
                 </div>
               )
             },
@@ -193,35 +172,40 @@ function App() {
       ]
     }
   ]);
-  const shownWorkflowSteps = useMemo(() => workflowSteps.slice(0, numberOfStepsShown), [numberOfStepsShown, workflowSteps]);
+  const shownWorkflowSteps = workflowSteps.slice(0, numberOfStepsShown);
   const [workflowModalOpen, setWorkflowModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  // const [playWorkflowLoading, setPlayWorkflowLoading] = useState(false);
   const [promptInput, setPromptInput] = useState("");
   const [changesApproved, setChangesApproved] = useState(true);
   const showConfirmationButtons = useCallback((i: number) => !changesApproved && i === shownWorkflowSteps.length - 1, [changesApproved, shownWorkflowSteps.length]);
   const workflowStepsRef = useRef<HTMLDivElement>(null);
+  const removeStep = useCallback((i: number) => {
+    setNumberOfStepsShown(numberOfStepsShown => numberOfStepsShown - 1);
+    setWorkflowSteps(workflowSteps => {
+      return workflowSteps.filter((step, idx) => idx !== i);
+    });
+  }, []);  // setItems is stable and does not actually need to be a dependency  const workflowStepsRef = useRef<HTMLDivElement>(null);
 
   const onButtonClick = () => {
     setLoading(true);
     setChangesApproved(false);
     setNumberOfStepsShown(numberOfStepsShown + 1);
     setTimeout(() => {
+      console.log("number of steps shown: ", numberOfStepsShown)
       setLoading(false);
       setPromptInput("");
-    }, 0);
+    }, 2500);
   };
-
-  // useEffect(() => {
-  //   console.log(workflowStepsRef?.current?.scrollTop);
-  //   console.log(workflowStepsRef?.current?.scrollHeight);
-  // }, [numberOfStepsShown]);
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Layout.Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div className="h-full flex flex-col justify-between">
           <div className="">
-            <h3 className="tracking-widest text-center text-white font-sans">DATABBQ 🔥</h3>
+            <h3 className="tracking-widest text-center text-white font-sans">
+              DATABBQ
+            </h3>
             <Button className="m-2 w-[calc(100%-16px)]" type="primary">
               <PlusOutlined />
               New Workflow
@@ -249,14 +233,14 @@ function App() {
         </div>
       </Layout.Sider>
       <Layout.Content>
-        <div className="w-full flex justify-center p-6 max-h-full">
+        <div className="w-full flex justify-center p-6 h-full">
           <div className="max-w-screen-xl w-full h-full flex flex-col gap-y-6">
             <Form layout="vertical" className="w-100">
               <Form.Item className="w-100">
-                <Input.TextArea value={promptInput} onChange={e => setPromptInput(e.target.value)} placeholder="Customize with ChatGPT. Proposed changes won't take effect until confirmed." autoSize={{ minRows: 3}} />
+                <Input.TextArea value={promptInput} onChange={e => setPromptInput(e.target.value)} placeholder="Customize workflow. Proposed changes won't take effect until confirmed." autoSize={{ minRows: 3}} />
               </Form.Item>
               <div className="flex gap-x-4">
-                <Button 
+                <Button
                   type="primary"
                   disabled={loading || !promptInput}
                   loading={loading}
@@ -270,7 +254,13 @@ function App() {
                   type="default"
                   disabled={loading || !shownWorkflowSteps.length || !changesApproved}
                   loading={false}
-                  onClick={() => console.log("clicked")}
+                  onClick={() => {
+                    setLoading(true);
+                    setTimeout(() => {
+                      setLoading(false);
+                      window.open("https://docs.google.com/spreadsheets/d/1ewtMZuXjsnC1f3lMmCtBlV99AuLwt3tOIdNyT5R-pv8/edit#gid=41564101", "_blank")
+                    }, 1000)
+                  }}
                   block
                 >
                   <PlayCircleOutlined />
@@ -278,79 +268,79 @@ function App() {
                 </Button>
               </div>
             </Form>
-            <div className="relative">
-              <div ref={workflowStepsRef} className="flex-grow w-full h-[560px] border-2 border-gray-200 border-solid rounded overflow-y-auto p-4">
-                {loading ? (
-                  <div className="flex flex-col h-full justify-center">
-                    <Skeleton active paragraph={{ rows: 16 }} />
-                  </div>
-                ) : shownWorkflowSteps.length ? (
-                  <div className="px-4 h-full flex flex-col gap-y-4">
-                    {shownWorkflowSteps.map((step, i) => (
-                      <div className={`flex flex-col p-4 gap-y-4 ${showConfirmationButtons(i) ? "border-2 border-green-500 border-dashed rounded" : ""}`}>
-                        <div className="flex gap-x-2">
-                          <div className="flex-grow flex flex-col gap-y-4">
-                            <div className="w-12 h-16 rounded-full border border-solid border-gray-200 flex flex-col justify-center items-center">
-                              <div className="font-">{i+1}</div>
-                            </div>
-                            <div className="w-12 flex h-full justify-center flex-grow">
-                              <div className="w-px border-l h-full border-dashed border-black"></div>
-                            </div>
+            <div ref={workflowStepsRef} className="flex-grow w-full border-2 border-gray-200 border-solid rounded overflow-y-auto p-4 relative">
+              {loading ? (
+                <div className="flex flex-col h-full justify-center">
+                  <Skeleton active paragraph={{ rows: 16 }} />
+                </div>
+              ) : shownWorkflowSteps.length ? (
+                <div className="px-4 h-full flex flex-col gap-y-4">
+                  {shownWorkflowSteps.map((step, i) => (
+                    <div className={`flex flex-col p-4 gap-y-4 ${showConfirmationButtons(i) ? "border-2 border-green-500 border-dashed rounded" : ""}`}>
+                      <div className="flex gap-x-2">
+                        <div className="flex-grow flex flex-col gap-y-4">
+                          <div className="w-12 h-16 rounded-full border border-solid border-gray-200 flex flex-col justify-center items-center">
+                            <div className="font-">{i+1}</div>
                           </div>
-                          <div className="w-full">
-                            <div className="flex justify-between w-full border-2 border-gray-200 border-solid p-2">
-                              <div className="rounded w-full flex gap-x-2">
-                                <img src={step.integration.iconImage} className="w-8 h-8" alt="Icon" />
-                                <div className="text-2xl font-bold text-gray-700">{step.integration.name}</div>
-                              </div>
-                              <CloseCircleOutlined className="cursor-pointer" />
-                            </div>
-                            <div className="mt-2">
-                              {step.actions.map(action => (
-                                <WorkflowAction action={action} />
-                              ))}
-                            </div>
+                          <div className="w-12 flex h-full justify-center flex-grow">
+                            <div className="w-px border-l h-full border-dashed border-black"></div>
                           </div>
                         </div>
-                        {showConfirmationButtons(i) && (
-                          <div className="flex gap-x-2">
-                            <Button type="default" block>Cancel</Button>
-                            <Button 
-                              className="bg-success-green hover:bg-green-500 text-white border-success-green border-hover-green:hover"
-                              block
-                              onClick={() => { setChangesApproved(true); }}
-                            >
-                              Apply
-                            </Button>
+                        <div className="w-full">
+                          <div className="flex justify-between w-full border-2 border-gray-200 border-solid p-2">
+                            <div className="rounded w-full flex gap-x-2">
+                              <img src={step.integration.iconImage} className="w-8 h-8" alt="Icon" />
+                              <div className="text-2xl font-bold text-gray-700">{step.integration.name}</div>
+                            </div>
+                            <CloseCircleOutlined className="cursor-pointer" onClick={() => removeStep(i)} />
                           </div>
-                        )}
+                          <div className="mt-2">
+                            {step.actions.map(action => (
+                              <WorkflowAction action={action} />
+                            ))}
+                          </div>
+                        </div>
                       </div>
-                    ))}
-                    <div className="w-[calc(100%-48px)] absolute h-4 z-5 bottom-px bg-[#f5f5f5] px-4"></div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col w-full h-full justify-center items-center gap-y-6">
-                    <img src={grillImage} alt="Grill" className="w-60" />
-                    <div className="flex flex-col gap-y-1 items-center">
-                      <div className="text-2xl font-extrabold">Let's Get Cookin! 🔥</div>
-                      <div className="text-center">
-                        Add a new workflow step to get started.
-                      </div>
+                      {showConfirmationButtons(i) && (
+                        <div className="flex gap-x-2">
+                          <Button type="default" block onClick={() => { removeStep(i) }}>Cancel</Button>
+                          <Button 
+                            className="bg-success-green hover:bg-green-500 text-white border-success-green border-hover-green:hover"
+                            block
+                            onClick={() => { setChangesApproved(true); }}
+                          >
+                            Apply
+                          </Button>
+                        </div>
+                      )}
                     </div>
-                    <Button type="default" onClick={() => setWorkflowModalOpen(true)}>
-                      <PlusOutlined />
-                      <span>Add Step</span>
-                    </Button>
+                  ))}
+                  <div className="w-[calc(100%-48px)] absolute h-4 z-5 bottom-px bg-[#f5f5f5] px-4"></div>
+                </div>
+              ) : (
+                <div className="flex flex-col w-full h-full justify-center items-center gap-y-6">
+                  <img src={DataBBQLogo} alt="Grill" className="w-60" />
+                  <div className="flex flex-col gap-y-1 items-center">
+                    <div className="text-2xl font-extrabold">Let's Get Cookin! 🔥</div>
+                    <div className="text-center">
+                      Add a new workflow step to get started.
+                    </div>
                   </div>
-                )}
-              </div>
+                  <Button type="default" onClick={() => setWorkflowModalOpen(true)}>
+                    <PlusOutlined />
+                    <span>Add Step</span>
+                  </Button>
+                </div>
+              )}
             </div>
+            {!!shownWorkflowSteps.length && !loading && (
             <Button type="default" onClick={() => setWorkflowModalOpen(true)}>
               <PlusOutlined />
               <span>Add Step</span>
             </Button>
+          )}
           </div>
-        </div>
+          </div>
         <WorkflowModal open={workflowModalOpen} setOpen={setWorkflowModalOpen} />
       </Layout.Content>
     </Layout>
