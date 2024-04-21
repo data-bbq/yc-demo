@@ -1,11 +1,10 @@
 {
   "files": {
-    "main.css": "/yc-demo/static/css/main.d0e592f9.css",
-    "main.js": "/yc-demo/static/js/main.203a08a8.js",
+    "main.css": "/yc-demo/static/css/main.b7d8fc0f.css",
+    "main.js": "/yc-demo/static/js/main.8090ab81.js",
     "static/js/453.6d88a90a.chunk.js": "/yc-demo/static/js/453.6d88a90a.chunk.js",
     "static/media/microsoft-word.png": "/yc-demo/static/media/microsoft-word.5937aba169867642b8f1.png",
     "static/media/databbq-logo.png": "/yc-demo/static/media/databbq-logo.c7548e27ce7b2d1e922e.png",
-    "static/media/merge.jpg": "/yc-demo/static/media/merge.d7383dad805f72725fff.jpg",
     "static/media/snowflake.png": "/yc-demo/static/media/snowflake.7f9abe801d1294a011fa.png",
     "static/media/sms.png": "/yc-demo/static/media/sms.5f1e9aa4d50d5ded0e75.png",
     "static/media/microsoft-outlook.png": "/yc-demo/static/media/microsoft-outlook.a06208d30beaa5e8f007.png",
@@ -16,12 +15,12 @@
     "static/media/pitchbook.png": "/yc-demo/static/media/pitchbook.e7964aec4aee4354aeac.png",
     "static/media/email.png": "/yc-demo/static/media/email.64945d2ebbfc57a71d51.png",
     "index.html": "/yc-demo/index.html",
-    "main.d0e592f9.css.map": "/yc-demo/static/css/main.d0e592f9.css.map",
-    "main.203a08a8.js.map": "/yc-demo/static/js/main.203a08a8.js.map",
+    "main.b7d8fc0f.css.map": "/yc-demo/static/css/main.b7d8fc0f.css.map",
+    "main.8090ab81.js.map": "/yc-demo/static/js/main.8090ab81.js.map",
     "453.6d88a90a.chunk.js.map": "/yc-demo/static/js/453.6d88a90a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d0e592f9.css",
-    "static/js/main.203a08a8.js"
+    "static/css/main.b7d8fc0f.css",
+    "static/js/main.8090ab81.js"
   ]
 }
