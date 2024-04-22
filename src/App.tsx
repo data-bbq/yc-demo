@@ -13,6 +13,7 @@ import { AppstoreOutlined, BellOutlined, BulbOutlined, CloseCircleOutlined, Down
 import { WorkflowAction } from './components/WorkflowAction';
 
 import SubMenu from 'antd/es/menu/SubMenu';
+import { RunningWorkflowModal } from './components/RunningWorkflowModal';
 
 
 export interface WorkflowStepAction {
@@ -36,33 +37,32 @@ function App() {
           action: (
             <div>
               <span>Query Table(s) </span>
-              <Tag closeIcon>Public High Growth Online Marketplace Companies List</Tag>
-              <Tag closeIcon>Mature Online Marketplace Companies List</Tag>
-              <span></span>
+              <Tag closeIcon>public_high_growth_online_marketplace_companies</Tag>
+              <Tag closeIcon>mature_online_marketplace_companies_list</Tag>
             </div>
           ),
           children: [
-            { 
-              action: (
-                <div>
-                  <span>Filter by </span>
-                  <Tag>
-                    <span className="mr-0.5">Last 12 months</span>
-                    <DownOutlined />
-                  </Tag>
-                </div>
-              )
-            },
+            // { 
+            //   action: (
+            //     <div>
+            //       <span>Filter by </span>
+            //       <Tag>
+            //         <span className="mr-0.5">Last 12 months</span>
+            //         <DownOutlined />
+            //       </Tag>
+            //     </div>
+            //   )
+            // },
             { 
               action: (
                 <div className="">
                   <span>Columns: </span>
-                  <Tag closeIcon>Company Name</Tag>
-                  <Tag closeIcon>Ticker</Tag>
-                  <Tag closeIcon>Leveraged Beta</Tag>
-                  <Tag closeIcon>Debt</Tag>
-                  <Tag closeIcon>Equity Value</Tag>
-                  <Tag closeIcon>Preferred Stock</Tag>
+                  <Tag closeIcon>company_name</Tag>
+                  <Tag closeIcon>ticker</Tag>
+                  <Tag closeIcon>leveraged_beta</Tag>
+                  <Tag closeIcon>debt</Tag>
+                  <Tag closeIcon>equity_value</Tag>
+                  <Tag closeIcon>preferred_stock</Tag>
                 </div>
               )
             },
@@ -107,9 +107,14 @@ function App() {
             {
               action: (
                 <div>
-                  <span>Full join data to </span>
+                  <span>Combine data with </span>
                   <Tag>
                     <span className="mr-0.5">Step 1</span>
+                    <DownOutlined />
+                  </Tag>
+                  <span>based on </span>
+                  <Tag>
+                    <span className="mr-0.5">Auto Combine</span>
                     <DownOutlined />
                   </Tag>
                 </div>
@@ -127,7 +132,7 @@ function App() {
             <div>
               <span>Export to File </span>
               <Tag>
-                <span className="mr-0.5">Uber DCF Model</span>
+                <span className="mr-0.5">Uber DCF Model.xlsx</span>
                 <DownOutlined />
               </Tag>
             </div>
@@ -173,8 +178,9 @@ function App() {
   ]);
   const shownWorkflowSteps = workflowSteps.slice(0, numberOfStepsShown);
   const [workflowModalOpen, setWorkflowModalOpen] = useState(false);
+  const [runningWorkflowModalOpen, setRunningWorkflowModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  // const [playWorkflowLoading, setPlayWorkflowLoading] = useState(false);
+  const [runningWorkflow, setRunningWorkflow] = useState(false);
   const [promptInput, setPromptInput] = useState("");
   const [changesApproved, setChangesApproved] = useState(true);
   const showConfirmationButtons = useCallback((i: number) => !changesApproved && i === shownWorkflowSteps.length - 1, [changesApproved, shownWorkflowSteps.length]);
@@ -193,7 +199,7 @@ function App() {
     setTimeout(() => {
       setLoading(false);
       setPromptInput("");
-    }, 0);
+    }, 2000);
   };
 
   return (
@@ -208,7 +214,7 @@ function App() {
               <PlusOutlined />
               New Workflow
             </Button>
-            <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" openKeys={["workflows"]}>
+            <Menu theme="dark" defaultSelectedKeys={['workflow1']} mode="inline" openKeys={["workflows"]}>
               <SubMenu key="workflows" icon={<AppstoreOutlined />} title="Workflows">
                 <Menu.Item key="workflow1">Uber DCF Model</Menu.Item>
                 <Menu.Item key="workflow2">Extract Deal Terms from Old Term Sheets</Menu.Item>
@@ -254,11 +260,12 @@ function App() {
                   disabled={loading || !shownWorkflowSteps.length || !changesApproved}
                   loading={false}
                   onClick={() => {
-                    setLoading(true);
+                    setRunningWorkflow(true);
+                    setRunningWorkflowModalOpen(true);
                     setTimeout(() => {
-                      setLoading(false);
-                      window.open("https://docs.google.com/spreadsheets/d/1ewtMZuXjsnC1f3lMmCtBlV99AuLwt3tOIdNyT5R-pv8/edit#gid=41564101", "_blank")
-                    }, 1000)
+                      setRunningWorkflow(false);
+                      // window.open("https://docs.google.com/spreadsheets/d/1ewtMZuXjsnC1f3lMmCtBlV99AuLwt3tOIdNyT5R-pv8/edit#gid=41564101", "_blank")
+                    }, 3000)
                   }}
                   block
                 >
@@ -314,11 +321,10 @@ function App() {
                       )}
                     </div>
                   ))}
-                  {/* <div className="w-[calc(100%-48px)] absolute h-4 z-5 bottom-px bg-[#f5f5f5] px-4"></div> */}
                 </div>
               ) : (
                 <div className="flex flex-col w-full h-full justify-center items-center gap-y-6">
-                  <img src={DataBBQLogo} alt="Grill" className="w-60" />
+                  <img src={DataBBQLogo} alt="Grill" className="w-40" />
                   <div className="flex flex-col gap-y-1 items-center">
                     <div className="text-2xl font-extrabold">Let's Get Cookin! 🔥</div>
                     <div className="text-center">
@@ -341,6 +347,7 @@ function App() {
           </div>
           </div>
         <WorkflowModal open={workflowModalOpen} setOpen={setWorkflowModalOpen} />
+        <RunningWorkflowModal open={runningWorkflowModalOpen} setOpen={setRunningWorkflowModalOpen} loading={runningWorkflow} />
       </Layout.Content>
     </Layout>
   );
